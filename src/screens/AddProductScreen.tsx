@@ -1,4 +1,3 @@
-import { useProducts } from "../context/ProductContext";
 import React, { useState } from "react";
 import {
   Button,
@@ -8,9 +7,12 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { useProducts } from "../context/ProductContext";
 
 export function AddProductScreen() {
-  const [naam, setNaam] = useState("");
+  const { addStockItem } = useProducts();
+
+  const [productNaam, setProductNaam] = useState("");
   const [locatie, setLocatie] = useState("");
   const [categorie, setCategorie] = useState("");
   const [hoeveelheid, setHoeveelheid] = useState("");
@@ -18,137 +20,88 @@ export function AddProductScreen() {
   const [houdbaarTot, setHoudbaarTot] = useState("");
   const [extraDagen, setExtraDagen] = useState("");
   const [waarschuwingDagen, setWaarschuwingDagen] = useState("");
-  const { addProduct } = useProducts();
+
+  function handleSave() {
+    addStockItem({
+      id: Date.now().toString(),
+      productNaam,
+      locatie,
+      categorie,
+      hoeveelheid,
+      eenheid,
+      houdbaarTot,
+      extraDagen,
+      waarschuwingDagen,
+    });
+
+    setProductNaam("");
+    setLocatie("");
+    setCategorie("");
+    setHoeveelheid("");
+    setEenheid("");
+    setHoudbaarTot("");
+    setExtraDagen("");
+    setWaarschuwingDagen("");
+
+    alert("Voorraad opgeslagen");
+  }
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>➕ Product toevoegen</Text>
+      <Text style={styles.title}>➕ Voorraad toevoegen</Text>
 
       <View style={styles.field}>
-        <Text style={styles.label}>Naam product</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Bijv. Melk"
-          value={naam}
-          onChangeText={setNaam}
-        />
+        <Text style={styles.label}>Productnaam</Text>
+        <TextInput style={styles.input} placeholder="Bijv. Melk" value={productNaam} onChangeText={setProductNaam} />
       </View>
 
       <View style={styles.field}>
         <Text style={styles.label}>Locatie</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Bijv. Koelkast"
-          value={locatie}
-          onChangeText={setLocatie}
-        />
+        <TextInput style={styles.input} placeholder="Bijv. Koelkast" value={locatie} onChangeText={setLocatie} />
       </View>
 
       <View style={styles.field}>
         <Text style={styles.label}>Categorie</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Bijv. Zuivel"
-          value={categorie}
-          onChangeText={setCategorie}
-        />
+        <TextInput style={styles.input} placeholder="Bijv. Zuivel" value={categorie} onChangeText={setCategorie} />
       </View>
 
       <View style={styles.field}>
         <Text style={styles.label}>Hoeveelheid</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Bijv. 2"
-          keyboardType="numeric"
-          value={hoeveelheid}
-          onChangeText={setHoeveelheid}
-        />
+        <TextInput style={styles.input} placeholder="Bijv. 2" keyboardType="numeric" value={hoeveelheid} onChangeText={setHoeveelheid} />
       </View>
 
       <View style={styles.field}>
         <Text style={styles.label}>Eenheid</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Bijv. liter, stuks, gram"
-          value={eenheid}
-          onChangeText={setEenheid}
-        />
+        <TextInput style={styles.input} placeholder="Bijv. liter, stuks, gram" value={eenheid} onChangeText={setEenheid} />
       </View>
 
       <View style={styles.field}>
         <Text style={styles.label}>Houdbaar tot</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Bijv. 12-07-2026"
-          value={houdbaarTot}
-          onChangeText={setHoudbaarTot}
-        />
+        <TextInput style={styles.input} placeholder="Bijv. 12-07-2026" value={houdbaarTot} onChangeText={setHoudbaarTot} />
       </View>
 
       <View style={styles.field}>
         <Text style={styles.label}>Nog bruikbaar na datum</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Aantal dagen"
-          keyboardType="numeric"
-          value={extraDagen}
-          onChangeText={setExtraDagen}
-        />
+        <TextInput style={styles.input} placeholder="Aantal dagen" keyboardType="numeric" value={extraDagen} onChangeText={setExtraDagen} />
       </View>
 
       <View style={styles.field}>
         <Text style={styles.label}>Waarschuwing vooraf</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Aantal dagen vooraf"
-          keyboardType="numeric"
-          value={waarschuwingDagen}
-          onChangeText={setWaarschuwingDagen}
-        />
+        <TextInput style={styles.input} placeholder="Aantal dagen vooraf" keyboardType="numeric" value={waarschuwingDagen} onChangeText={setWaarschuwingDagen} />
       </View>
 
       <View style={styles.buttonWrapper}>
-        <Button
-          title="Opslaan"
-          onPress={() => {
-            addProduct({
-    id: Date.now().toString(),
-              naam,
-              locatie,
-              categorie,
-              hoeveelheid,
-              eenheid,
-              houdbaarTot,
-              extraDagen,
-              waarschuwingDagen,
-            });
-
-            alert("Product opgeslagen.");
-          }}
-        />
+        <Button title="Opslaan" onPress={handleSave} />
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#F4F4F4",
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  field: {
-    marginBottom: 14,
-  },
-  label: {
-    fontWeight: "bold",
-    marginBottom: 6,
-  },
+  container: { flex: 1, padding: 20, backgroundColor: "#F4F4F4" },
+  title: { fontSize: 26, fontWeight: "bold", marginBottom: 20 },
+  field: { marginBottom: 14 },
+  label: { fontWeight: "bold", marginBottom: 6 },
   input: {
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
@@ -156,8 +109,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#DDDDDD",
   },
-  buttonWrapper: {
-    marginTop: 10,
-    marginBottom: 50,
-  },
+  buttonWrapper: { marginTop: 10, marginBottom: 50 },
 });
