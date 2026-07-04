@@ -7,6 +7,7 @@ import { HomeScreen } from "./src/screens/HomeScreen";
 import { InventoryScreen } from "./src/screens/InventoryScreen";
 import { AddProductScreen } from "./src/screens/AddProductScreen";
 import { SettingsScreen } from "./src/screens/SettingsScreen";
+import { ProductsScreen } from "./src/screens/ProductsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +24,12 @@ export default function App() {
             name="Home"
             component={HomeScreen}
             options={{ title: "🏠 Home" }}
+          />
+          
+          <Tab.Screen
+            name="Producten"
+            component={ProductsScreen}
+            options={{ title: "📚 Producten" }}
           />
 
           <Tab.Screen
@@ -42,6 +49,7 @@ export default function App() {
             component={SettingsScreen}
             options={{ title: "⚙️ Instellingen" }}
           />
+        
         </Tab.Navigator>
       </NavigationContainer>
     </ProductProvider>
